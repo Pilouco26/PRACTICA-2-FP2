@@ -1,106 +1,105 @@
+/**
+ * Programa principal
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdlib.h>
 #include "cjt_paraules.h"
-#include <string.h>
 
 
-void inicialitzar(cjt_paraules_t *c)
+int main()
 {
-    c->n_el=0; //incialitza //FET 100%
-
-}
-bool pertany(cjt_paraules_t *c, char p[])
-{
+    cjt_paraules_t c;       // Conjunt de paraules
     int i;
-    bool r;
-    r=false;
+    char p[9];
 
 
-    for(i=0; i< (c->n_el); i++)
+    // Inicialitzem el conjunt de paraules
+    inicialitzar(&c);
+
+    // I no haurem de mostrar res
+    mostrar(&c);
+
+    // Ha de dir que es buit
+    if (buit(&c))
     {
-         if(strcmp(c->paraules[i], p)==0) //si son iguals retorna 0
+        printf("El conjunt es buit.\n");
+    }
+    else
+    {
+        printf("El conjunt no es buit.\n");
+    }
+
+    // Afegim una paraula
+    afegir(&c, "hola");
+
+    // Afegim una paraula
+    afegir(&c, "hola2");
+
+    // Afegim una paraula
+    afegir(&c, "adeu");
+
+    mostrar(&c);
+
+    // Ha de dir que pertany al conjunt
+    if (pertany(&c, "hola"))
+    {
+        printf("La paraula hola pertany al conjunt\n");
+    }
+    else
+    {
+        printf("La paraula hola no pertany al conjunt\n");
+    }
+
+    // No ha de notificar res, si la paraula no hi es
+    eliminar(&c, "casa");
+
+    // No ha de notificar res, pero ha d'eliminar la paraula perque hi √©s
+    eliminar(&c, "hola");
+
+    // Ara ha de dir que NO pertany al conjunt
+    if (pertany(&c, "hola"))
+    {
+        printf("La paraula hola pertany al conjunt\n");
+    }
+    else
+    {
+        printf("La paraula hola no pertany al conjunt\n");
+    }
+
+    // La seg√ºent paraula no s'ha d'afegir perque supera longitud
+    if (afegir(&c, "anticonstitucionalment"))
+    {
+        printf("La paraula anticonstitucionalment s'ha afegit\n");
+    }
+    else
+    {
+        printf("La paraula anticonstitucionalment no s'ha afegit\n");
+    }
+
+    // La seg√ºent paraula no s'ha d'afegir perque te caracters no permesos
+    if (afegir(&c, "OrdiNador"))
+    {
+        printf("La paraula OrdiNador s'ha afegit\n");
+    }
+    else
+    {
+        printf("La paraula OrdiNador no s'ha afegit\n");
+    }
+
+    // La darrera prova consisteix en emplenar el conjunt amb el maxim de paraules
+    // Cada paraula sera un conjunt de lletres
+    for (i = 1000; i< 1100; i++)
+    {
+        sprintf(p, "%d", i);    // Fa un printf sobre un la cadena 'p'
+        if (!afegir(&c, p))
         {
-           r=true;
+            printf("La paraula %s no hi cap!\n");
         }
+
     }
-    return r;
-    //problemas chicos, error de novato
+    // Hem de veure que hi ha paraules que no ha afegit
+    mostrar(&c);
+    return 1;
 }
-
-
-bool ple(cjt_paraules_t *c)
-{
-    n_elems(&c);
-    bool r;
-    r = false;
-    if(c->n_el== MAX_EL)
-    {
-        r=true;
-    }
-    return r;
-}
-bool buit(cjt_paraules_t *c)
-{
-    bool r;
-    r=false;
-    if(c->n_el==0)     //SI no hi ha cap element esta buit   //FET 100%
-    {
-          r=true; //indica que es veritat
-    }
-
-    return r; //envia el resultat
-    //S'ha enganchao, s'ha enganchao, s'ha enganchao; en la puzolana! °AhÌ est· el milagro!
-}
-bool afegir(cjt_paraules_t *c, char p[])
-{
-
-    n_elems(&c); //falla algo amb aquesta merda, funciona amb inicialitzar i fa el retorn 1 pero no podem inicialitzar
-    bool r =true;
-
-            if(ple(c)) r=false;
-            else
-            {
-                if(strlen(p)>=8) r=false;//discrimina la llargada de la paraula
-                else
-                {
-                     if(pertany(c, p)) r=false;
-
-                     else //discrimina si ja pertany al string
-                     {
-                         c->paraules[c->n_el]=(char*)malloc(sizeof(char)*(strlen(p)+1)); //obra l'espai per memoria dinamica char * cadena + 1
-                         strcpy(c->paraules[c->n_el], p); //copia la paraula a la cadena
-                         c->n_el++; //suma elements
-                     }
-
-
-                }
-            }
-
-
-    return r;
-    //falta corregir + aplicar els caracters predeterminats per l'enunciat.
-}
-void eliminar(cjt_paraules_t *c, char p[])
-{
-
-    n_elems(&c->n_el); //reb els elements que hi ha
-    c->paraules[c->n_el]=(char*)malloc(sizeof(char)*strlen(p+1)); //calcula la llargada de la paraula
-    free(c->paraules[c->n_el]);  //borra la paraula
-    c->n_el--; //resta el numero d'elements
-     //Grans avanÁos
-    //problamement ya esta.
-}
-int n_elems(cjt_paraules_t *c)
-{
-    return(c->n_el);
-}
-void mostrar(cjt_paraules_t *c)
-{
-    for(int i=0; i<c->n_el; i++)
-    {
-        printf("%s", c->paraules[i]);
-        printf("\n");
-    }
-}
-
-
